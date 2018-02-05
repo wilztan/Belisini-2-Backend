@@ -89,6 +89,7 @@ class ProductController extends Controller
         //
     }
 
+    //search API
     public function searchName($name)
     {
         return Product::where('name','LIKE','%'.$name.'%')->get();

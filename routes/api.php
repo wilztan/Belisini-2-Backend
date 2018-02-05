@@ -20,7 +20,7 @@ Route::post('/login','UserController@accessToken');
 
 Route::post('/register','UserController@store');
 
-
+//show product
 Route::get('/product/{name}/{id}','ProductController@showProduct');
 
 

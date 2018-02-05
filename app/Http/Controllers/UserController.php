@@ -37,23 +37,35 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        /*validation for new registrant*/
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
         ]);
+
+        /*if validation not qualified, then error/*
         if($validator->fails()){
             return response()->json(['message'=>'wrong']);
         }
+
+        /*if password and confirm not match*/
         if($request->password != $request->password_confirmation){
             return response()->json(['message'=>'wrong']);   
         }
+
+        /*store user*/
         $user = User::create([
             'name'=>$request->name,
             'email'=>$request->email,
             'password'=>bcrypt($request->password),
         ]);
+
+        /*return response*/
         return $this->prepareResult(true,["accessToken"=>$user->createToken('belisini2')->accessToken],[],'user verified');
+
+
+        /*Previouse Try Out*/
         // return response()->json([
         //     'message' => 'success'
         // ], 201);
@@ -106,6 +118,7 @@ class UserController extends Controller
 
     public function userInfo()
     {
+        /* to get User Info such as name, email, etc*/
         return response()->json(request()->user());
     }
 
@@ -120,7 +133,7 @@ class UserController extends Controller
             if(hash::check($request->password,$user->password)){
                 return $this->prepareResult(true,["accessToken"=>$user->createToken('belisini2')->accessToken],[],'user verified');
             }else{
-                return $this->prepareResult(false, [], ["password" => "Wrong passowrd"],"Password not matched");  
+                return $this->prepareResult(false, [], ["password" => "Wrong password"],"Password not matched");  
            }
  
        }else{
@@ -149,6 +162,7 @@ class UserController extends Controller
 
     public function prepareResult($status,$data,$error, $msg)
     {
+        /* returning json respnse */
         return [
             'status'=>$status,
             'data'=>$data,
