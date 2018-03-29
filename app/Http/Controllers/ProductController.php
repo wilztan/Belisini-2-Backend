@@ -35,7 +35,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        return Response()->json($request->all());
+       $product = Product::create([
+          'name'=>$request->name,
+          'price'=>$request->price,
+          'stock'=>$request->stock,
+          'description'=>$request->description,
+          'owner_id'=>request()->user()->id,
+        ]);
+        // Validating Photos
+        if ($request->file('image')->isValid()) {
+            $img_url=$request->file('image')->move('img/item/',$product->id.".tmp");
+            $product->image = $img_url;
+            $product->save();
+        }
+        
+        $status = 0;
+        if(Product::where('id','=',$product->id)->exists())
+        $status = 1;
+
+        $data = [
+            'product'   => $product,
+            'status'   => $status,
+        ];
+        return $data;
     }
 
     /**
