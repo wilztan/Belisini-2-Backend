@@ -32,6 +32,7 @@ Route::group(['middleware' => ['web','auth:api']], function()
 	Route::resource('users','UserController');
 
 	Route::get('profile','UserController@userInfo');
+	Route::get('getMyProduct','ProductController@getMyProduct');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

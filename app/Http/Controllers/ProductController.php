@@ -48,7 +48,7 @@ class ProductController extends Controller
             $product->image = $img_url;
             $product->save();
         }
-        
+
         $status = 0;
         if(Product::where('id','=',$product->id)->exists())
         $status = 1;
@@ -115,5 +115,16 @@ class ProductController extends Controller
     public function searchName($name)
     {
         return Product::where('name','LIKE','%'.$name.'%')->get();
+    }
+
+    public function getMyProduct()
+    {
+      $user = request()->user()->id;
+      $product = Product::where('owner_id','=',$user)->get();
+      $data=[
+        'product' => $product,
+        'user' => $user,
+      ];
+      return $data;
     }
 }
