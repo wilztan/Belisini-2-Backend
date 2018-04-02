@@ -25,7 +25,7 @@ Route::get('/product/{name}/{id}','ProductController@showProduct');
 
 
 
-Route::group(['middleware' => ['web','auth:api']], function()
+Route::middleware(['web','auth:api'])->group( function()
 {
 	Route::resource('/item','ProductController');
 
@@ -33,6 +33,14 @@ Route::group(['middleware' => ['web','auth:api']], function()
 
 	Route::get('profile','UserController@userInfo');
 	Route::get('getMyProduct','ProductController@getMyProduct');
+
+	Route::prefix('transaction')->group(function ()
+	{
+			Route::resource('/','TransactionController');
+			Route::get('order','TransactionController@findPersonalOrder');
+			Route::get('sold','TransactionController@findPersonalTransaction');
+			Route::get('dashboard','TransactionController@getTransactionInfo');
+	});
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

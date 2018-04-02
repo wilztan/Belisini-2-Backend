@@ -14,7 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return product::all();
+        return $data = [ 'product'=> product::all()];
     }
 
     /**
@@ -73,7 +73,12 @@ class ProductController extends Controller
 
     public function showProduct($name,$id)
     {
-        return Product::where('id','=',$id)->first();
+        return $data=[
+          'product'=>Product::join('users','products.owner_id','=','users.id')
+          ->where('products.id','=',$id)
+          ->select('products.name as name','price','users.name as owner_id','stock','description','products.image as image','products.id as id')
+          ->first(),
+        ];
     }
 
 

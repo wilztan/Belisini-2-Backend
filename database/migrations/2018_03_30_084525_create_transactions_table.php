@@ -18,6 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->string('item_id');
             $table->string('user_id');
             $table->string('status');
+            $table->string('qty')->nullable();
             $table->timestamps();
         });
     }
